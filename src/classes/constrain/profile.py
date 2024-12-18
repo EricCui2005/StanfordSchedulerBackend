@@ -28,7 +28,9 @@ class Profile:
             max_quarter_units=dict.get("max_quarter_units"),
             min_quarter_units=dict.get("min_quarter_units")
         )
-        
+    
+    
+    
     """_summary_
     Converts the current Profile object into a dictionary representation
     """
@@ -40,23 +42,22 @@ class Profile:
         }
     
     
-        
+    
+    """Accessors"""
     @property
     def id(self) -> str:
         return self._id
-    
     @property
     def max_quarter_units(self) -> int:
         return self._max_quarter_units
-    
     @property
     def min_quarter_units(self) -> int:
         return self._min_quarter_units
     
+    """Setters"""
     @max_quarter_units.setter
     def max_quarter_units(self, value: int):
         self._max_quarter_units = value
-    
     @min_quarter_units.setter
     def min_quarter_units(self, value: int):
         self._min_quarter_units = value

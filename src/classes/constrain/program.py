@@ -3,6 +3,7 @@ from classes.components.pool import Pool
 from typing import List, Dict, Any
 
 class Program:
+    
     """
     Degree program with program requirements.
     
@@ -17,13 +18,14 @@ class Program:
         self._required_courses = required_courses
         self._pools = pools
     
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "required_courses": [course.to_dict() for course in self._required_courses],
-            "id": self._id,
-            "pools": [pool.to_dict() for pool in self._pools]
-        }
     
+    
+    """_summary_
+    Generic class method that converts a dictionary representation of a Program 
+    into a Program object
+    Returns:
+        _type_: Program
+    """
     @classmethod
     def from_dict(cls, dict) -> 'Program':
         return cls(
@@ -31,6 +33,20 @@ class Program:
             id=dict.get("id"),
             pools=[Pool.from_dict(pool_dict) for pool_dict in dict.get("pools")] if dict.get("pools") != None else []
         )
+    
+    
+    
+    """_summary_
+    Converts the current Program object into a dictionary representation
+    """
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "required_courses": [course.to_dict() for course in self._required_courses],
+            "id": self._id,
+            "pools": [pool.to_dict() for pool in self._pools]
+        }
+    
+    
     
     @property
     def id(self) -> str:
