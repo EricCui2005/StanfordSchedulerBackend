@@ -1,12 +1,6 @@
 # CourseConstrainSolver
 A constrain solver for course planning
 
-## Development
-
-Best practice for development is to create a new branch for whatever you're working on (titled `[your name]/[what you're working on]`, and then make a PR when it's done.
-```
-git checkout -b [BRANCH NAME]
-```
 
 To enable linting, autocomplete, and code navigation in tests/, add the following to your .vscode/settings.json file.
 ```
