@@ -1,6 +1,7 @@
 from typing import Dict, Any
 
 class Profile:
+    
     """User-set constraints for the solver"""
     def __init__(
         self, 
@@ -12,13 +13,14 @@ class Profile:
         self._max_quarter_units = max_quarter_units
         self._min_quarter_units = min_quarter_units
         
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "id": self._id,
-            "max_quarter_units": self._max_quarter_units,
-            "min_quarter_units": self._min_quarter_units
-        }
-        
+    
+    
+    """_summary_
+    Generic class method that converts a dictionary representation of a profile
+    into a Profile object
+    Returns:
+        _type_: _description_
+    """
     @classmethod
     def from_dict(cls, dict) -> 'Profile':
         return cls(
@@ -26,6 +28,18 @@ class Profile:
             max_quarter_units=dict.get("max_quarter_units"),
             min_quarter_units=dict.get("min_quarter_units")
         )
+        
+    """_summary_
+    Converts the current Profile object into a dictionary representation
+    """
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "id": self._id,
+            "max_quarter_units": self._max_quarter_units,
+            "min_quarter_units": self._min_quarter_units
+        }
+    
+    
         
     @property
     def id(self) -> str:
