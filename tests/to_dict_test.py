@@ -2,6 +2,7 @@ from classes.components.course import Course
 from classes.constrain.program import Program
 from classes.constrain.profile import Profile
 from classes.components.enums import Quarter, GER, Grade, Grading
+from classes.components.pool import Pool
 
 def test_course_to_dict_all_fields_populated():
     
@@ -132,6 +133,29 @@ def test_program_to_dict():
                 ug_reqs=[GER.WAY_A_II, GER.WAY_AQR],
                 grading=Grading.LETTER
             )
+        ],
+        pools=[
+            Pool(
+                type="Course",
+                objects=["C1", "C2", "C3"],
+                num_required=2
+            ),
+            Pool(
+                type="Pool",
+                objects=[
+                    Pool(
+                        type="Course",
+                        objects=["C4", "C5", "C6"],
+                        num_required=2
+                    ),
+                    Pool(
+                        type="Course",
+                        objects=["C7", "C8", "C9"],
+                        num_required=2
+                    )
+                ],
+                num_required=1
+            )
         ]
     )
     
@@ -234,6 +258,29 @@ def test_program_to_dict():
                 "ug_reqs": ["WAY_A_II", "WAY_AQR"],
                 "grading": "LETTER"
             },
+        ],
+        "pools": [
+            {
+                "type": "Course",
+                "objects": ["C1", "C2", "C3"],
+                "num_required": 2
+            },
+            {
+                "type": "Pool",
+                "objects": [
+                    {
+                        "type": "Course",
+                        "objects": ["C4", "C5", "C6"],
+                        "num_required": 2
+                    },
+                    {
+                        "type": "Course",
+                        "objects": ["C7", "C8", "C9"],
+                        "num_required": 2
+                    }
+                ],
+                "num_required": 1
+            }
         ]
     }
     
@@ -252,7 +299,58 @@ def test_profile_to_dict():
     }
     
     assert profile_dict == expected_dict
+
+def test_course_pool_to_dict():
     
+    course_pool = Pool(type="Course", objects=["C1", "C2", "C3"], num_required=2)
+    
+    course_pool_dict = course_pool.to_dict()
+    
+    expected_dict ={
+        "type": "Course",
+        "objects": ["C1", "C2", "C3"],
+        "num_required": 2
+    }
+    
+    assert course_pool_dict == expected_dict
+    
+def test_pool_pool_to_dict():
+    
+    pool_pool = Pool(
+        type="Pool",
+        objects=[
+            Pool(
+                type="Course",
+                objects=["C1", "C2", "C3"],
+                num_required=2
+            ),
+            Pool(
+                type="Course",
+                objects=["C4", "C5", "C6"],
+                num_required=1
+            )
+        ],
+        num_required=1
+    )
+    
+    pool_pool_dict = pool_pool.to_dict()
+    
+    expected_dict = {
+        "type": "Pool",
+        "objects": [
+            {
+                "type": "Course",
+                "objects": ["C1", "C2", "C3"],
+                "num_required": 2
+            },
+            {
+                "type": "Course",
+                "objects": ["C4", "C5", "C6"],
+                "num_required": 1
+            }
+        ],
+        "num_required": 1
+    }
     
     
     

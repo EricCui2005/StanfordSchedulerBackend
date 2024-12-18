@@ -46,8 +46,11 @@ def solve_user_schedule():
     # Configuring solver
     scheduleSolver = SolverConfig(program=program_obj, profile=profile_obj)
     
-    # Solving and creating output
+    # Solving
     schedule = scheduleSolver.solve()
+    
+    # TODO: Figure out better output schema
+    # Temporary scuffed output as a string
     scheduleString = ""
     if schedule:
         for course_code, quarter in schedule.items():
