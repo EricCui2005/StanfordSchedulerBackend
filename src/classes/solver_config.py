@@ -9,6 +9,7 @@ from collections import defaultdict
 from typing import Dict, Set, List
 
 class SolverConfig:
+    
     """
     Configures the solver with required courses and constraints and generates a schedule.
 
