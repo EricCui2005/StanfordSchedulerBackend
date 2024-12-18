@@ -53,23 +53,10 @@ class Course:
     def __str__(self) -> str:
         return f"{self._code}: {self._title}"
     
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "code": self._code,
-            "title": self._title,
-            "units": self._units,
-            "description": self._description,
-            "prereqs": [course.to_dict() for course in self._prereqs],
-            "coreqs": [course.to_dict() for course in self._coreqs],
-            "offered_quarters": [quarter.name for quarter in self._offered_quarters],
-            "instructors": self._instructors,
-            "median_hrs": self._median_hrs,
-            "median_grade": getattr(self._median_grade, "name", None),
-            "percent_A_A_plus": self._percent_A_A_plus,
-            "ug_reqs": [req.name for req in self._ug_reqs],
-            "grading": getattr(self._grading, "name", None)
-        }
     
+    
+    # Generic class method to convert a dictionary representation
+    # of a course into a Course object
     @classmethod
     def from_dict(cls, dict) -> 'Course':
         return cls(
@@ -87,76 +74,89 @@ class Course:
             ug_reqs=[GER[ger_name] for ger_name in dict.get("ug_reqs")] if dict.get("ug_reqs") != None else [],
             grading=Grading[dict.get("grading")] if dict.get("grading") != None else None
         )
-        
-    @property
-    def code(self) -> str:
-        return self._code
-
-    @property
-    def title(self) -> str:
-        return self._title
     
-    @property
-    def units(self) -> Union[int, tuple[int, int]]:
-        """Return the course units."""
-        return self._units
-
-    @property
-    def description(self) -> str:
-        return self._description
     
-    @property
-    def prereqs(self) -> List['Course']:
-        """Return the list of prerequisite courses."""
-        return self._prereqs
     
     def add_prereq(self, prereq: 'Course') -> None:
         """Add a prerequisite to the course."""
         if not isinstance(prereq, Course):
             raise TypeError(f"Prerequisite must be a 'Course' object, but got {type(prereq).__name__}")
         self._prereqs.append(prereq)
-
-    @property
-    def coreqs(self) -> List['Course']:
-        """Return the list of corequisite courses."""
-        return self._coreqs
     
     def add_coreq(self, coreq: 'Course') -> None:
         """Add a corequisite to the course."""
         if not isinstance(coreq, Course):
             raise TypeError(f"Corequisite must be a 'Course' object, but got {type(prereq).__name__}")
         self._coreqs.append(coreq)
-
+        
+    def to_dict(self) -> Dict[str, Any]:
+        """Converts the current Course object into its dictionary representation"""
+        return {
+            "code": self._code,
+            "title": self._title,
+            "units": self._units,
+            "description": self._description,
+            "prereqs": [course.to_dict() for course in self._prereqs],
+            "coreqs": [course.to_dict() for course in self._coreqs],
+            "offered_quarters": [quarter.name for quarter in self._offered_quarters],
+            "instructors": self._instructors,
+            "median_hrs": self._median_hrs,
+            "median_grade": getattr(self._median_grade, "name", None),
+            "percent_A_A_plus": self._percent_A_A_plus,
+            "ug_reqs": [req.name for req in self._ug_reqs],
+            "grading": getattr(self._grading, "name", None)
+        }
+    
+    
+    
+    # Accessors
+    @property
+    def code(self) -> str:
+        return self._code
+    @property
+    def title(self) -> str:
+        return self._title
+    @property
+    def units(self) -> Union[int, tuple[int, int]]:
+        """Return the course units."""
+        return self._units
+    @property
+    def description(self) -> str:
+        return self._description
+    @property
+    def prereqs(self) -> List['Course']:
+        """Return the list of prerequisite courses."""
+        return self._prereqs
+    @property
+    def coreqs(self) -> List['Course']:
+        """Return the list of corequisite courses."""
+        return self._coreqs
     @property
     def offered_quarters(self) -> List[Quarter]:
         """Return the quarters the course is offered."""
         return self._offered_quarters
-    
     @property
     def instructors(self) -> List[List[str]]:
         """Return the list of instructors per quarter."""
         return self._instructors
-    
     @property
     def median_hrs(self) -> Union[int, float]:
         """Return the median hours required."""
         return self._median_hrs
-    
     @property
     def median_grade(self) -> Optional[Grade]:
         """Return the median grade or None."""
         return self._median_grade
-    
     @property
     def percent_A_A_plus(self) -> Optional[Union[int, float]]:
         """Return the percentage of A/A+ grades or None."""
         return self._percent_A_A_plus
-    
     @property
     def ug_reqs(self) -> Optional[List[GER]]:
         """Return the undergraduate requirements or None."""
         return self._ug_reqs
-
     @property
     def grading(self) -> Grading:
         return self._grading
+
+    

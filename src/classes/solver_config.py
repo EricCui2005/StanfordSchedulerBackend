@@ -46,6 +46,7 @@ class SolverConfig:
             "max_quarter_units": self._max_quarter_units,
             "prerequisites": self._prerequisites,
             "required_courses": self._required_courses,
+            "required_pools": self._required_pools
         }
 
         self.update()
@@ -115,3 +116,6 @@ class SolverConfig:
         for courseVar, course in self._course_dict.items():
             constraint = Or([courseVar == quarter.value for quarter in course.offered_quarters])
             self._solver.add(constraint)
+            
+    def _required_pools(self) -> None:
+        pass
