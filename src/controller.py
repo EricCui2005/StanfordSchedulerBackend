@@ -6,6 +6,7 @@ from pymongo import MongoClient
 from classes.components.course import Course
 from classes.components.enums import Quarter
 import json
+import certifi
 
 
 def load_app_settings(file_path='appsettings.json'):
@@ -16,7 +17,9 @@ def load_app_settings(file_path='appsettings.json'):
 # Database testing
 app_settings = load_app_settings()
 connection_string = app_settings["DatabaseConnection"]["ConnectionString"]
-client = MongoClient(connection_string)
+
+# certifi included to explicitly point the backend to a trusted CA certificate
+client = MongoClient(connection_string, tlsCAFile=certifi.where())
 
 
 app = Flask(__name__)
