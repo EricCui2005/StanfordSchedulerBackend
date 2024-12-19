@@ -6,7 +6,10 @@ from pymongo import MongoClient
 from classes.components.course import Course
 from classes.components.enums import Quarter
 import json
+
+# certifi included to explicitly point the backend to a trusted CA certificate
 import certifi
+from flask_cors import CORS
 
 
 def load_app_settings(file_path='appsettings.json'):
@@ -23,6 +26,7 @@ client = MongoClient(connection_string, tlsCAFile=certifi.where())
 
 
 app = Flask(__name__)
+CORS(app)
 
 @app.get('/solve-user-schedule')
 def solve_user_schedule():
@@ -112,6 +116,45 @@ def post_program_course():
         return jsonify({"error": f"No program found with ID {program_id}"}), 404
     
     return jsonify({"result": f"Course {course['code']}: {course['title']} added to program {program_id}"}), 200
+
+@app.post('/post-prereq-course')
+def post_prereq_course():
+    # Accessing DB and collection
+    db = client["SchedulerDB"]
+    collection = db["Programs"]
+    
+    # Accessing request information
+    request_json = request.json
+    program_id = request_json['id']
+    course_code = request_json['course']
+    
+    # Getting prereq course
+    prereq_course = request_json['prereq_course']
+    
+    # Validating for valid (offered quarters) string
+    for quarter_string in prereq_course['offered_quarters']:
+        if quarter_string not in Quarter.__members__:
+            return jsonify({"error": f"Invalid quarter offered string: {quarter_string}"}), 400
+    
+    result = collection.update_one(
+        {
+            "id": program_id, 
+            "required_courses.code": course_code
+        },
+        {
+            "$push": {
+                    "required_courses.$.prereqs": prereq_course
+            }
+        }
+    )
+    
+    if result.matched_count == 0:
+        return jsonify({"error": f"No program found with ID {program_id} or course with code {course_code}"}), 404
+    if result.modified_count == 0:
+        return jsonify({"error": f"Course {course_code} not found in program {program_id}"}), 404
+    
+    return jsonify({"result": f"Prereq course {prereq_course['code']} added to course {course_code} in program {program_id}"}), 200
+    
 
 
 @app.post('/post-profile')
