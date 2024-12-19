@@ -97,7 +97,7 @@ class SolverConfig:
     """
     def _prerequisites(self) -> None:
         for course_code, prereqs in self._prereq_graph.items():
-            course_var = Int(course_code)
+            course_var = self._course_dict[course_code]
             for prereq_code in prereqs:
                 prereq_var = Int(prereq_code)
                 self._solver.add(course_var > prereq_var)
