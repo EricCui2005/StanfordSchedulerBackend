@@ -83,6 +83,37 @@ def post_program():
     
     return jsonify({"result": inserted_string}), 200
 
+
+@app.post('/post-program-course')
+def post_program_course():
+    
+    # Accessing DB and collection
+    db = client["SchedulerDB"]
+    collection = db["Programs"]
+    
+    # Accessing request information
+    request_json = request.json
+    course = request_json['course']
+    program_id = request_json['id']
+    
+    # Validating for valid (offered quarters) string
+    for quarter_string in course['offered_quarters']:
+        if quarter_string not in Quarter.__members__:
+            return jsonify({"error": f"Invalid quarter offered string: {quarter_string}"}), 400
+    
+    # Updating program sheet
+    result = collection.update_one(
+        {"id": program_id},
+        {"$push": {"required_courses": course}}
+    )
+    
+    # Check if the update was successful
+    if result.matched_count == 0:
+        return jsonify({"error": f"No program found with ID {program_id}"}), 404
+    
+    return jsonify({"result": f"Course {course['code']}: {course['title']} added to program {program_id}"}), 200
+
+
 @app.post('/post-profile')
 def post_profile():
     
