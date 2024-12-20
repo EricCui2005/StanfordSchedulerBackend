@@ -26,7 +26,7 @@ class Course:
         title: str = None,
         units: Union[int, tuple[int, int]] = None,
         description: str = None,
-        prereqs: Optional[List['Course']] = [],
+        prereqs: Optional[List[str]] = [],
         coreqs: Optional[List['Course']] = [],
         offered_quarters: Optional[List[Quarter]] = [],
         instructors: Optional[List[str]] = [],
@@ -64,7 +64,7 @@ class Course:
             title=dict.get("title"),
             units=dict.get("units"),
             description=dict.get("description"),
-            prereqs=[cls.from_dict(course_dict) for course_dict in dict.get("prereqs")] if dict.get("prereqs") != None else [],
+            prereqs=[code for code in dict.get("prereqs")] if dict.get("prereqs") != None else [],
             coreqs=[cls.from_dict(course_dict) for course_dict in dict.get("coreqs")] if dict.get("coreqs") != None else [],
             offered_quarters=[Quarter[quarter_name] for quarter_name in dict.get("offered_quarters")] if dict.get("offered_quarters") != None else [], 
             instructors=dict.get("instructors"),
@@ -77,10 +77,10 @@ class Course:
     
     
     
-    def add_prereq(self, prereq: 'Course') -> None:
+    def add_prereq(self, prereq: str) -> None:
         """Add a prerequisite to the course."""
-        if not isinstance(prereq, Course):
-            raise TypeError(f"Prerequisite must be a 'Course' object, but got {type(prereq).__name__}")
+        if not isinstance(prereq, str):
+            raise TypeError(f"Prerequisite must be a string, but got {type(prereq).__name__}")
         self._prereqs.append(prereq)
     
     def add_coreq(self, coreq: 'Course') -> None:
@@ -96,7 +96,7 @@ class Course:
             "title": self._title,
             "units": self._units,
             "description": self._description,
-            "prereqs": [course.to_dict() for course in self._prereqs],
+            "prereqs": [code for code in self._prereqs],
             "coreqs": [course.to_dict() for course in self._coreqs],
             "offered_quarters": [quarter.name for quarter in self._offered_quarters],
             "instructors": self._instructors,

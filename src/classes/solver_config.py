@@ -39,8 +39,8 @@ class SolverConfig:
         self._prereq_graph = defaultdict(set)
         for course in self._program.required_courses:
             for prereq in course.prereqs:
-                if Int(prereq.code) in self._course_dict:
-                    self._prereq_graph[course.code].add(prereq.code)
+                if Int(prereq) in self._course_dict:
+                    self._prereq_graph[course.code].add(prereq)
 
         self._modifiers = {
             "max_quarter_units": self._max_quarter_units,

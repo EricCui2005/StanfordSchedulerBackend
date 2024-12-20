@@ -131,11 +131,6 @@ def post_prereq_course():
     # Getting prereq course
     prereq_course = request_json['prereq_course']
     
-    # Validating for valid (offered quarters) string
-    for quarter_string in prereq_course['offered_quarters']:
-        if quarter_string not in Quarter.__members__:
-            return jsonify({"error": f"Invalid quarter offered string: {quarter_string}"}), 400
-    
     result = collection.update_one(
         {
             "id": program_id, 
@@ -153,7 +148,7 @@ def post_prereq_course():
     if result.modified_count == 0:
         return jsonify({"error": f"Course {course_code} not found in program {program_id}"}), 404
     
-    return jsonify({"result": f"Prereq course {prereq_course['code']} added to course {course_code} in program {program_id}"}), 200
+    return jsonify({"result": f"Prereq course {prereq_course} added to course {course_code} in program {program_id}"}), 200
     
 
 
