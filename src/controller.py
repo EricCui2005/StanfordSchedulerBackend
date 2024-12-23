@@ -1,3 +1,10 @@
+import sys
+import os
+
+# Add 'src' to the Python search path
+sys.path.append(os.path.abspath('src'))
+print("appending")
+
 from flask import Flask, jsonify, request
 from classes.constrain.program import Program
 from classes.constrain.profile import Profile
@@ -6,11 +13,6 @@ from pymongo import MongoClient
 from classes.components.course import Course
 from classes.components.enums import Quarter
 import json
-import sys
-import os
-
-# Add 'src' to the Python search path
-sys.path.append(os.path.abspath('src'))
 
 # certifi included to explicitly point the backend to a trusted CA certificate
 import certifi
