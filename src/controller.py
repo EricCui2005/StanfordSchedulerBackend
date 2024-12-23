@@ -56,17 +56,30 @@ def solve_user_schedule():
     # Solving
     schedule = scheduleSolver.solve()
     
-    # TODO: Figure out better output schema
-    # Temporary scuffed output as a string
-    scheduleString = ""
+    # Master schedule dictionary
+    schedule_dict = {"FRESH": {Quarter.FRESH_FALL: [], Quarter.FRESH_WINTER: [], Quarter.FRESH_SPRING: []}, 
+                     "SOPH": {Quarter.SOPH_FALL: [], Quarter.SOPH_WINTER: [], Quarter.SOPH_SPRING: []}, 
+                     "JUNIOR": {Quarter.JUNIOR_FALL: [], Quarter.JUNIOR_WINTER: [], Quarter.JUNIOR_SPRING: []}, 
+                     "SENIOR": {Quarter.SENIOR_FALL: [], Quarter.SENIOR_WINTER: [], Quarter.SENIOR_SPRING: []}}
+    
     if schedule:
         for course_code, quarter in schedule.items():
-            scheduleString += f" | {course_code} is scheduled for {quarter}"
+            if quarter.value <= 3:
+                schedule_dict["FRESH"][quarter].append(course_code)
+            elif quarter.value <= 7: 
+                schedule_dict["SOPH"][quarter].append(course_code)
+            elif quarter.value <= 11:
+                schedule_dict["JUNIOR"][quarter].append(course_code)
+            else:
+                schedule_dict["SENIOR"][quarter].append(course_code)
     else:
-        scheduleString = "No valid schedule found"
+        return jsonify({"schedule": "No schedule found"}), 200
     
-    # Returning
-    return jsonify({"schedule": scheduleString}), 200
+    # Converting schedule to JSON serializable format
+    for year in schedule_dict:
+        schedule_dict[year] = {quarter.name: courses for quarter, courses in schedule_dict[year].items()}
+    
+    return jsonify({"schedule": schedule_dict}), 200
 
 
 # Insert a program document into DB
@@ -131,11 +144,6 @@ def post_prereq_course():
     # Getting prereq course
     prereq_course = request_json['prereq_course']
     
-    # Validating for valid (offered quarters) string
-    for quarter_string in prereq_course['offered_quarters']:
-        if quarter_string not in Quarter.__members__:
-            return jsonify({"error": f"Invalid quarter offered string: {quarter_string}"}), 400
-    
     result = collection.update_one(
         {
             "id": program_id, 
@@ -153,7 +161,7 @@ def post_prereq_course():
     if result.modified_count == 0:
         return jsonify({"error": f"Course {course_code} not found in program {program_id}"}), 404
     
-    return jsonify({"result": f"Prereq course {prereq_course['code']} added to course {course_code} in program {program_id}"}), 200
+    return jsonify({"result": f"Prereq course {prereq_course} added to course {course_code} in program {program_id}"}), 200
     
 
 
