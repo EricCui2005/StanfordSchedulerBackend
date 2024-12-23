@@ -89,11 +89,11 @@ class SolverConfig:
     """_summary_
     Adds min quarter units constraints to solver
     """
-    def _min_quarter_units(self) -> None:
-        for quarter in Quarter:
-            load = sum([If(courseVar == quarter.value, course.units, 0) for courseVar, course in self._course_dict.items()])
-            constraint = load >= self._profile.min_quarter_units
-            self._solver.add(constraint)
+    # def _min_quarter_units(self) -> None:
+    #     for quarter in Quarter:
+    #         load = sum([If(courseVar == quarter.value, course.units, 0) for courseVar, course in self._course_dict.items()])
+    #         constraint = load >= self._profile.min_quarter_units
+    #         self._solver.add(constraint)
 
     """_summary_
     Adds prerequisite constraints to solver
