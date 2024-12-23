@@ -29,7 +29,7 @@ app_settings = load_app_settings()
 connection_string = app_settings["DatabaseConnection"]["ConnectionString"]
 
 # certifi included to explicitly point the backend to a trusted CA certificate
-client = MongoClient(connection_string, tlsCAFile=certifi.where())
+client = MongoClient(connection_string, tls=True, tlsCAFile=certifi.where())
 
 
 app = Flask(__name__)
@@ -179,7 +179,7 @@ def post_profile():
     db = client["SchedulerDB"]
     collection = db["Profiles"]
     
-    # Pseudo validation (Add real validation)
+    # Pseudo validatin (Add real validation)
     request_json = request.json
     profile = Profile.from_dict(request_json)
     profile_insert = profile.to_dict()
@@ -189,5 +189,6 @@ def post_profile():
     
     return jsonify({"result": inserted_string}), 200
 
+# REMOVE THIS FOR PRODUCTION
 # app.run(debug=True)
     
