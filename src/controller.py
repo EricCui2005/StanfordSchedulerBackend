@@ -189,5 +189,5 @@ def post_profile():
     
     return jsonify({"result": inserted_string}), 200
 
-app.run(debug=True)
+# app.run(debug=True)
     
