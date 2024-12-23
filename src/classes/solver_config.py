@@ -6,7 +6,7 @@ from classes.components.course import Course
 from classes.components.enums import Quarter
 
 from collections import defaultdict
-from typing import Dict, Set, List
+from typing import Dict, Set, List, DefaultDict
 
 class SolverConfig:
     
@@ -33,13 +33,16 @@ class SolverConfig:
         self._profile = profile
 
         self._course_dict: Dict[Int, Course] = {}
+        self._z3_course_dict: Dict[str, Int] = {}
         for course in self._program.required_courses:
-            self._course_dict[Int(course.code)] = course
-
-        self._prereq_graph = defaultdict(set)
+            z3Var = Int(course.code)
+            self._course_dict[z3Var] = course
+            self._z3_course_dict[course.code] = z3Var
+            
+        self._prereq_graph: DefaultDict[str, Set[str]] = defaultdict(set)
         for course in self._program.required_courses:
             for prereq in course.prereqs:
-                if Int(prereq) in self._course_dict:
+                if self._z3_course_dict[prereq] in self._course_dict:
                     self._prereq_graph[course.code].add(prereq)
 
         self._modifiers = {
@@ -97,9 +100,9 @@ class SolverConfig:
     """
     def _prerequisites(self) -> None:
         for course_code, prereqs in self._prereq_graph.items():
-            course_var = self._course_dict[course_code]
+            course_var = self._z3_course_dict[course_code]
             for prereq_code in prereqs:
-                prereq_var = Int(prereq_code)
+                prereq_var = self._z3_course_dict[prereq_code]
                 self._solver.add(course_var > prereq_var)
 
     """_summary_
@@ -133,10 +136,10 @@ class SolverConfig:
 
     """Accessors"""
     @property
-    def course_dict(self) -> Dict[int, Course]:
+    def course_dict(self) -> Dict[Int, Course]:
         return self._course_dict
     @property
-    def prereq_graph(self) -> Dict[int, Set[int]]:
+    def prereq_graph(self) -> Dict[str, Set[str]]:
         return self._prereq_graph
     @property
     def constraints(self) -> Dict[str, List[ExprRef]]:

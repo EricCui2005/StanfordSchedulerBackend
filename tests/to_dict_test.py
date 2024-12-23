@@ -11,7 +11,7 @@ def test_course_to_dict_all_fields_populated():
         title="TITLE",
         units=5,
         description="DESCRIPTION",
-        prereqs=[Course(code="PREREQCODE", title="PREREQTITLE")],
+        prereqs=["PREREQCODE"],
         coreqs=[Course(code="COREQCODE", title="COREQTITLE")],
         offered_quarters=[Quarter.FRESH_FALL, Quarter.FRESH_WINTER],
         instructors=["INSTRUCTOR1", "INSTRUCTOR2"],
@@ -29,23 +29,7 @@ def test_course_to_dict_all_fields_populated():
         "title": "TITLE",
         "units": 5,
         "description": "DESCRIPTION",
-        "prereqs": [
-            {
-                "code": "PREREQCODE",
-                "title": "PREREQTITLE",
-                "units": None,
-                "description": None,
-                "prereqs": [],
-                "coreqs": [],
-                "offered_quarters": [],
-                "instructors": [],
-                "median_hrs": None,
-                "median_grade": None,
-                "percent_A_A_plus": None,
-                "ug_reqs": [],
-                "grading": None
-            }    
-        ],
+        "prereqs": ["PREREQCODE"],
         "coreqs": [
             {
                 "code": "COREQCODE",
@@ -108,7 +92,7 @@ def test_program_to_dict():
                 title="TITLE1",
                 units=5,
                 description="DESCRIPTION",
-                prereqs=[Course(code="PREREQCODE", title="PREREQTITLE")],
+                prereqs=["PREREQCODE"],
                 coreqs=[Course(code="COREQCODE", title="COREQTITLE")],
                 offered_quarters=[Quarter.FRESH_FALL, Quarter.FRESH_WINTER],
                 instructors=["INSTRUCTOR1", "INSTRUCTOR2"],
@@ -123,7 +107,7 @@ def test_program_to_dict():
                 title="TITLE2",
                 units=5,
                 description="DESCRIPTION",
-                prereqs=[Course(code="PREREQCODE", title="PREREQTITLE")],
+                prereqs=["PREREQCODE"],
                 coreqs=[Course(code="COREQCODE", title="COREQTITLE")],
                 offered_quarters=[Quarter.FRESH_FALL, Quarter.FRESH_WINTER],
                 instructors=["INSTRUCTOR1", "INSTRUCTOR2"],
@@ -169,23 +153,7 @@ def test_program_to_dict():
                 "title": "TITLE1",
                 "units": 5,
                 "description": "DESCRIPTION",
-                "prereqs": [
-                    {
-                        "code": "PREREQCODE",
-                        "title": "PREREQTITLE",
-                        "units": None,
-                        "description": None,
-                        "prereqs": [],
-                        "coreqs": [],
-                        "offered_quarters": [],
-                        "instructors": [],
-                        "median_hrs": None,
-                        "median_grade": None,
-                        "percent_A_A_plus": None,
-                        "ug_reqs": [],
-                        "grading": None
-                    }    
-                ],
+                "prereqs": ["PREREQCODE"],
                 "coreqs": [
                     {
                         "code": "COREQCODE",
@@ -216,23 +184,7 @@ def test_program_to_dict():
                 "title": "TITLE2",
                 "units": 5,
                 "description": "DESCRIPTION",
-                "prereqs": [
-                    {
-                        "code": "PREREQCODE",
-                        "title": "PREREQTITLE",
-                        "units": None,
-                        "description": None,
-                        "prereqs": [],
-                        "coreqs": [],
-                        "offered_quarters": [],
-                        "instructors": [],
-                        "median_hrs": None,
-                        "median_grade": None,
-                        "percent_A_A_plus": None,
-                        "ug_reqs": [],
-                        "grading": None
-                    }    
-                ],
+                "prereqs": ["PREREQCODE"],
                 "coreqs": [
                     {
                         "code": "COREQCODE",
