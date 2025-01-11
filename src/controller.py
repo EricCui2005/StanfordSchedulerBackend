@@ -64,29 +64,21 @@ def solve_user_schedule():
     schedule = scheduleSolver.solve()
     
     # Master schedule dictionary
-    schedule_dict = {"FRESH": {Quarter.FRESH_FALL: [], Quarter.FRESH_WINTER: [], Quarter.FRESH_SPRING: []}, 
-                     "SOPH": {Quarter.SOPH_FALL: [], Quarter.SOPH_WINTER: [], Quarter.SOPH_SPRING: []}, 
-                     "JUNIOR": {Quarter.JUNIOR_FALL: [], Quarter.JUNIOR_WINTER: [], Quarter.JUNIOR_SPRING: []}, 
-                     "SENIOR": {Quarter.SENIOR_FALL: [], Quarter.SENIOR_WINTER: [], Quarter.SENIOR_SPRING: []}}
+    schedule_dict = {Quarter.FRESH_FALL: [], Quarter.FRESH_WINTER: [], Quarter.FRESH_SPRING: [], 
+                     Quarter.SOPH_FALL: [], Quarter.SOPH_WINTER: [], Quarter.SOPH_SPRING: [], 
+                     Quarter.JUNIOR_FALL: [], Quarter.JUNIOR_WINTER: [], Quarter.JUNIOR_SPRING: [], 
+                     Quarter.SENIOR_FALL: [], Quarter.SENIOR_WINTER: [], Quarter.SENIOR_SPRING: []}
     
     if schedule:
         for course_code, quarter in schedule.items():
             course_name = [course for course in program_obj.required_courses if course.code == course_code][0].title
             schedule_string = f"{course_code}: {course_name}"
-            if quarter.value <= 3:
-                schedule_dict["FRESH"][quarter].append(schedule_string)
-            elif quarter.value <= 7: 
-                schedule_dict["SOPH"][quarter].append(schedule_string)
-            elif quarter.value <= 11:
-                schedule_dict["JUNIOR"][quarter].append(schedule_string)
-            else:
-                schedule_dict["SENIOR"][quarter].append(schedule_string)
+            schedule_dict[quarter].append(schedule_string)
     else:
         return jsonify({"schedule": "No schedule found"}), 200
     
     # Converting schedule to JSON serializable format
-    for year in schedule_dict:
-        schedule_dict[year] = {quarter.name: courses for quarter, courses in schedule_dict[year].items()}
+    schedule_dict = {quarter.name: courses for quarter, courses in schedule_dict.items()}
     
     return jsonify({"schedule": schedule_dict}), 200
 
