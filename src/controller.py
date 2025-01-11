@@ -34,7 +34,7 @@ client = MongoClient(connection_string, tls=True, tlsCAFile=certifi.where())
 
 app = Flask(__name__)
 CORS(app)
-
+# Testin
 @app.get('/solve-user-schedule')
 def solve_user_schedule():
     
@@ -71,14 +71,16 @@ def solve_user_schedule():
     
     if schedule:
         for course_code, quarter in schedule.items():
+            course_name = [course for course in program_obj.required_courses if course.code == course_code][0].title
+            schedule_string = f"{course_code}: {course_name}"
             if quarter.value <= 3:
-                schedule_dict["FRESH"][quarter].append(course_code)
+                schedule_dict["FRESH"][quarter].append(schedule_string)
             elif quarter.value <= 7: 
-                schedule_dict["SOPH"][quarter].append(course_code)
+                schedule_dict["SOPH"][quarter].append(schedule_string)
             elif quarter.value <= 11:
-                schedule_dict["JUNIOR"][quarter].append(course_code)
+                schedule_dict["JUNIOR"][quarter].append(schedule_string)
             else:
-                schedule_dict["SENIOR"][quarter].append(course_code)
+                schedule_dict["SENIOR"][quarter].append(schedule_string)
     else:
         return jsonify({"schedule": "No schedule found"}), 200
     
@@ -190,5 +192,5 @@ def post_profile():
     return jsonify({"result": inserted_string}), 200
 
 # REMOVE THIS FOR PRODUCTION
-# app.run(debug=True)
+app.run(debug=True)
     
