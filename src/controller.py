@@ -34,7 +34,7 @@ client = MongoClient(connection_string, tls=True, tlsCAFile=certifi.where())
 
 app = Flask(__name__)
 CORS(app)
-# Testin
+
 @app.get('/solve-user-schedule')
 def solve_user_schedule():
     
