@@ -51,7 +51,8 @@ class SolverConfig:
             "max_quarter_units": self._max_quarter_units,
             "prerequisites": self._prerequisites,
             "required_courses": self._required_courses,
-            "required_pools": self._required_pools
+            "required_pools": self._required_pools,
+            "quarter_preferences": self._quarter_preferences
         }
 
         self.update()

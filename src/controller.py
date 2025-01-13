@@ -12,6 +12,7 @@ from classes.solver_config import SolverConfig
 from pymongo import MongoClient
 from classes.components.course import Course
 from classes.components.enums import Quarter
+import urllib.parse
 import json
 
 # certifi included to explicitly point the backend to a trusted CA certificate
@@ -41,6 +42,16 @@ def solve_user_schedule():
     # Extracting URL parameters
     program_id = request.args.get("program")
     profile_id = request.args.get("profile")
+    
+    # Extracting encoded course-quarter preferences
+    encoded_preferences = request.args.get("preferences")
+    if not encoded_preferences:
+        return jsonify({"error": "Missing 'preferences' parameter"}), 400
+
+    # Decoding preferences
+    preferences = 
+
+    
     
     # Accessing collections
     db = client["SchedulerDB"]
