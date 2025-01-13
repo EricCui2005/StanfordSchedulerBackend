@@ -26,11 +26,13 @@ class SolverConfig:
         self, 
         program: Program,
         profile: Profile = None,
+        preferences: Dict[str, Quarter] = None
     ) -> None:
         
         self._solver = Solver()
         self._program = program
         self._profile = profile
+        self._preferences = preferences
 
         self._course_dict: Dict[Int, Course] = {}
         self._z3_course_dict: Dict[str, Int] = {}
@@ -112,6 +114,15 @@ class SolverConfig:
         for courseVar, course in self._course_dict.items():
             constraint = Or([courseVar == quarter.value for quarter in course.offered_quarters])
             self._solver.add(constraint)
+    
+    """_summary_
+    Adds quarter preference constraint to solver
+    """
+    def _quarter_preferences(self) -> None:
+        for course, quarter_preference in self._preferences.items():
+            course_var = self._course_dict[course]
+            self._solver.add(course_var == quarter_preference.value)
+            
             
     def _required_pools(self) -> None:
         pass
