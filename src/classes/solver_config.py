@@ -132,8 +132,6 @@ class SolverConfig:
         else:
             return None
 
-
-    # Comment
     """Accessors"""
     @property
     def course_dict(self) -> Dict[Int, Course]:
