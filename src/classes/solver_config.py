@@ -120,9 +120,10 @@ class SolverConfig:
     Adds quarter preference constraint to solver
     """
     def _quarter_preferences(self) -> None:
-        for course, quarter_preference in self._preferences.items():
-            course_var = self._course_dict[course]
-            self._solver.add(course_var == quarter_preference.value)
+        if self._preferences:
+            for course, quarter_preference in self._preferences.items():
+                course_var = self._course_dict[course]
+                self._solver.add(course_var == quarter_preference.value)
             
             
     def _required_pools(self) -> None:

@@ -36,21 +36,17 @@ client = MongoClient(connection_string, tls=True, tlsCAFile=certifi.where())
 app = Flask(__name__)
 CORS(app)
 
-@app.get('/solve-user-schedule')
+# POST endpoint acting as a GET endpoint to simplify sending quarter preference data
+@app.post('/solve-user-schedule')
 def solve_user_schedule():
     
-    # Extracting URL parameters
-    program_id = request.args.get("program")
-    profile_id = request.args.get("profile")
+    # Extract parameters from JSON body (emulating GET parameters)
+    request_data = request.get_json()
+    if not request_data:
+        return jsonify({"error": "Request body must be JSON"}), 400
     
-    # Extracting encoded course-quarter preferences
-    encoded_preferences = request.args.get("preferences")
-    if not encoded_preferences:
-        return jsonify({"error": "Missing 'preferences' parameter"}), 400
-
-    # Decoding preferences
-    preferences = 
-
+    program_id = request_data.get("program")
+    profile_id = request_data.get("profile")
     
     
     # Accessing collections
